@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Teacher Dashboard</title>
+
+    <!-- Font Icon -->
+    <link
+      rel="stylesheet"
+      href="fonts/material-icon/css/material-design-iconic-font.min.css"
+    />
+
+    <!-- Main css -->
+    <link rel="stylesheet" href="css/style.css" />
+    <!-- Latest compiled and minified CSS -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+
+    <!-- Optional theme -->
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"
+    ></script>
+    <!--firebase database-->
+    <script src="https://www.gstatic.com/firebasejs/6.1.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.1.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.1.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.1.0/firebase-database.js"></script>
+    <script src="./js/firebase.js"></script>
+    <script src="./js/upload.js"></script>
+    <script src="./js/logout.js"></script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="#">Teacher</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          
+          <li class="nav-item">
+            <button
+              type="button"
+              style="margin-top: 6px; margin-left: 3px;"
+              class="btn btn-secondary btn-sm"
+              data-toggle="modal"
+              data-target="#myModal"
+            >
+              Upload
+            </button>
+          </li>
+        </ul>
+        <div id="welcome" class="my-2 my-lg-2 my-sm-2"></div>
+        <form class="form-inline my-2 my-lg-0">
+          <button
+            class="btn btn-outline-success my-2 my-sm-0"
+            type="submit"
+            onclick="logout();"
+          >
+            Log Out
+          </button>
+        </form>
+      </div>
+    </nav>
+    <div class="container">
+      <!-- Trigger the modal with a button -->
+
+      <!-- Modal -->
+      <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">
+                &times;
+              </button>
+            </div>
+            <div class="modal-body">
+              <form class="div-container">
+                <form>
+                  <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-2 col-form-label" style="padding-top: 35px; padding-left:25px">Subject</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="inputEmail3" placeholder="subject/ topic name">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-2 col-form-label" style="padding-top: 35px; padding-left:28px">Description</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="inputEmail3" placeholder="description">
+                    </div>
+                  </div>
+                <label for="myfile"></label>
+                <input type="file" id="myfile" name="myfile" multiple /><br />
+                <br />
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button
+                class="btn btn-default bg-success"
+                onclick="upload(document.getElementById('subject').value, document.getElementById('type').value, document.getElementById('description').value)"
+              >
+                Submit
+              </button>
+              <button
+                type="button"
+                class="btn btn-default bg-primary"
+                data-dismiss="modal"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <br />
+    <br />
+
+    <div class="container">
+      <h1 id="myTable"></h1>
+      <table id="table1" class="table table-hover table-centered table-striped">
+        <thead style="background-color: lavender;">
+          <tr >
+            <th>Subject Name</th>
+            <th>Description</th>
+            <th>Type</th>
+            <th>UserID</th>
+            <th>Uploaded By</th>
+            <th>Uploaded On</th>
+            <th>Download</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!--table data dynamically added through table.js-->
+        </tbody>
+      </table>
+    </div>
+    <script src="./js/uploadfile.js"></script>
+    <script src="./js/table.js"></script>
+    
+    <script>
+      if(localStorage.getItem("key") == null) {
+        alert("Login First!!!");
+        window.location.replace("./signin.html");
+      }
+      document.getElementById("welcome").innerHTML =
+        "Welcome" + "&nbsp" + localStorage.getItem("username") +"!"+ "&nbsp" + "&nbsp";
+      
+          </script>
+  </body>
+</html>
